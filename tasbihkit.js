@@ -90,19 +90,25 @@ export const TasbihKit = {
   },
 
   /**
-   * Searches for multiple Tasbih items by their IDs.
-   *
-   * @param {string} category - The category to search within.
-   * @param {Array<(string|number)>} ids - An array of IDs to find.
-   * @returns {Promise<TasbihItem[]>}
-   */
+       * Searches for multiple Tasbih items by their IDs.
+       * * ENHANCEMENT: Normalizes input to ensure 'ids' is always an array.
+       *
+       * @param {string} category - The category to search within.
+       * @param {Array<(string|number)> | (string|number)} ids - An array of IDs to find, or a single ID.
+       * @returns {Promise<TasbihItem[]>}
+       */
   async searchByIds(category, ids) {
-    if (!ids || ids.length === 0) return [];
+    // --- Input Normalization for Robustness ---
+    // 1. Ensure ids is an array. If it's a single value, wrap it.
+    const idArray = Array.isArray(ids) ? ids : [ids];
+
+    if (!idArray || idArray.length === 0) return [];
+    // ------------------------------------------
 
     const list = await this.loadAll(category);
 
     // Convert IDs to a Set for O(1) average lookup time
-    const idSet = new Set(ids.map(id => String(id).trim()));
+    const idSet = new Set(idArray.map(id => String(id).trim()));
 
     // Filter the list for items whose IDs are in the set
     return list.filter(t => idSet.has(t.id));
