@@ -33,6 +33,7 @@ export const TasbihKit = {
     // Create the Promise that performs the async operations
     const fetchAndCachePromise = (async () => {
       try {
+        // const url = `./data/${safeCategory}.json`;
         const url = `https://cdn.jsdelivr.net/npm/@mdkva/tasbihkit/data/${safeCategory}.json`;
 
         const res = await fetch(url);
